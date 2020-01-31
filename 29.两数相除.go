@@ -7,25 +7,20 @@
 // @lc code=start
 func divide(dividend int, divisor int) int {
 	// int32 max value
-	var INT_MAX = int32(^uint32(0) >> 1)
+	var int32Max = (1 << 31) - 1
 	// int32 min value
-	var INT_MIN = int32(^INT_MAX)
-	// check overflow
-	if dividend == int(INT_MIN) && divisor == -1 {
-		return int(INT_MAX)
+	var int32Min = int(^int32(int32Max))
+	// check overflows
+	if dividend == int32Min && divisor == -1 {
+		return int(int32Max)
 	}
 	// check sign
-	flag := false
-	if dividend > 0 && divisor > 0 {
-		flag = true
-	} else if dividend < 0 && divisor < 0 {
-		flag = true
-	}
-	
+	flag := (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0)
+
 	n1 := int(math.Abs(float64(dividend)))
 	n2 := int(math.Abs(float64(divisor)))
 
-	// divide by bit 
+	// divide by bit
 	result := 0
 	for n2 <= n1 {
 		shift := 0
@@ -37,7 +32,7 @@ func divide(dividend int, divisor int) int {
 	}
 
 	if !flag {
-		result = result * -1
+		result = -result
 	}
 
 	return result
